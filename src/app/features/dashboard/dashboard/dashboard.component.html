@@ -1,0 +1,16 @@
+<div class="dashboard-container">
+
+  <!-- Conteúdo principal -->
+  <div class="main-content">
+      
+    <!-- Cards de estoque -->
+    <app-estoque-cards (itemSelecionado)="toggleGrafico($event)"></app-estoque-cards>
+
+    <!-- Parte inferior: gráfico + previsão -->
+    <div class="bottom-section">
+      <app-grafico-historico [filtroInsumo]="insumoFiltrado"></app-grafico-historico>
+      <app-previsao-recarga class="half"></app-previsao-recarga>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div class="cards-wrapper">
+  <button class="arrow left" (click)="scrollLeft()">&#10094;</button>
+
+  <div class="cards-container" #cardsContainer>
+    <div class="card" *ngFor="let item of estoqueMock" (click)="selecionarItem(item.nome)">
+      <h3>{{ item.nome }}</h3>
+      <p>{{ item.quantidade }} unidades</p>
+    </div>
+  </div>
+
+  <button class="arrow right" (click)="scrollRight()">&#10095;</button>
+</div>

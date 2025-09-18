@@ -1,0 +1,59 @@
+<div class="logs-container">
+  <h3>Logs do Almoxarifado</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Código do Item</th>
+        <th>Modelo</th>
+        <th>Produto</th>
+        <th>Data do Evento</th>
+        <th>Tipo do Evento</th>
+        <th>Sessões Ativas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let log of logsMock">
+        <td>{{ log.codigoItem }}</td>
+        <td>{{ log.modelo }}</td>
+        <td>{{ log.produto }}</td>
+        <td>{{ log.dataEvento | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ log.tipoEvento }}</td>
+        <td>
+          <a href="#" (click)="abrirItens(log, $event)">
+            {{ log.sessoes.length }} sessão(ões)
+          </a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal de Sessões -->
+<div class="modal-backdrop" *ngIf="logSelecionado">
+  <div class="modal">
+    <h4>Sessões do item {{ logSelecionado.codigoItem }}</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Sessão</th>
+          <th>Colaborador</th>
+          <th>Almoxarifado</th>
+          <th>Laboratório</th>
+          <th>Início Sessão</th>
+          <th>Final Sessão</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sessao of logSelecionado.sessoes">
+          <td>{{ sessao.numero }}</td>
+          <td>{{ sessao.colaborador }}</td>
+          <td>{{ sessao.almoxarifado }}</td>
+          <td>{{ sessao.laboratorio }}</td>
+          <td>{{ sessao.inicio | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ sessao.fim | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <button (click)="fecharModal()">Fechar</button>
+  </div>
+</div>
