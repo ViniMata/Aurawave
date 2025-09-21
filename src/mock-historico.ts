@@ -1,12 +1,8 @@
 export const graficoMockCompleto = [
-  { nome: 'Luvas', historico: [
-      { data: '2025-09-08', quantidade: 5 },
-      { data: '2025-09-09', quantidade: 3 },
-      { data: '2025-09-10', quantidade: 4 },
-      { data: '2025-09-11', quantidade: 6 },
-      { data: '2025-09-12', quantidade: 2 },
-      { data: '2025-09-13', quantidade: 4 },
-      { data: '2025-09-14', quantidade: 3 },
+  { nome: 'Garrafa', historico: [
+      { data: '2025-09-21', quantidade: 0 },
+      { data: '2025-09-22', quantidade: 0 },
+      { data: '2025-09-23', quantidade: 0 }
   ]},
   { nome: 'Seringas', historico: [
       { data: '2025-09-08', quantidade: 2 },
@@ -135,3 +131,27 @@ export const graficoMockCompleto = [
       { data: '2025-09-14', quantidade: 1 },
   ]}
 ];
+
+export const logsMock = [
+    {
+      codigoItem: 'I-101',
+      modelo: 'Modelo A',
+      produto: 'Luvas',
+      dataEvento: new Date('2025-09-10T08:00'),
+      tipoEvento: 'Entrada',
+      sessoes: [
+        { numero: 'S-001', colaborador: 'João', almoxarifado: 'Almox 1', laboratorio: 'Lab 1', inicio: new Date('2025-09-10T08:00'), fim: new Date('2025-09-10T12:00') },
+        { numero: 'S-002', colaborador: 'Maria', almoxarifado: 'Almox 2', laboratorio: 'Lab 2', inicio: new Date('2025-09-10T13:00'), fim: new Date('2025-09-10T17:00') }
+      ]
+    },
+    {
+      codigoItem: 'I-102',
+      modelo: 'Modelo B',
+      produto: 'Máscara',
+      dataEvento: new Date('2025-09-11T09:00'),
+      tipoEvento: 'Saída',
+      sessoes: [
+        { numero: 'S-003', colaborador: 'Carlos', almoxarifado: 'Almox 1', laboratorio: 'Lab 1', inicio: new Date('2025-09-11T09:00'), fim: new Date('2025-09-11T11:00') }
+      ]
+    }
+  ];

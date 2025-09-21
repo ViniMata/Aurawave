@@ -1,9 +1,17 @@
 .main {
-    display: flex;
+  display: flex;
+  width: 100vw; /* ocupa toda a largura da tela */
+  height: 100vh; /* ocupa toda a altura da tela */
 }
 
-
 .sidebar {
+  width: 100px; /* largura fixa do sidebar */
+  /* Se quiser, pode adicionar height 100vh */
+}
+
+.content {
+  flex: 1; /* ocupa o espaço restante */
   display: flex;
-  height: auto;
+  justify-content: center; /* centraliza horizontalmente */
+  align-items: center;     /* centraliza verticalmente */
 }
