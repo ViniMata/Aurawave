@@ -23,33 +23,29 @@ export class EstoqueCardsComponent implements OnInit {
   constructor(private mqttService: MqttService) {}
 
   ngOnInit() {
-    this.mqttService.mensagemRecebida.subscribe((msg: any) => {
-      try {
-        if (!msg.data || msg.data.trim() === "") return; // ignora vazio
+  this.mqttService.mensagemRecebida.subscribe((msg: any) => {
+    try {
+      console.log('[ESTOQUE] Mensagem recebida:', msg);
 
-        const data = JSON.parse(msg.data);
-
-        // Alterna sessão quando Pedro entra/sai
-        if (data.eventType === 'access') {
-          this.sessionAtiva = !this.sessionAtiva;
-          if (!this.sessionAtiva) {
-            // Sessão finalizada: Garrafa volta para estoque
-            const item = this.estoque.find(i => i.nome === 'Garrafa');
-            if (item) item.quantidade = 1;
-          }
-        }
-
-        // Pedro pega a garrafa
-        if (data.eventType === 'item' && this.sessionAtiva) {
-          const item = this.estoque.find(i => i.nome === 'Garrafa');
-          if (item) item.quantidade = 0;
-        }
-
-      } catch (e) {
-        console.error('Erro ao processar mensagem MQTT', e, msg.data);
+      // Alterna sessão quando Pedro entra/sai
+      if (msg.eventType === 'access') {
+        this.sessionAtiva = !this.sessionAtiva;
+        console.log('[ESTOQUE] Sessão alterada. Ativa?', this.sessionAtiva);
       }
-    });
-  }
+
+      // Pedro pega a garrafa
+      if (msg.eventType === 'item' && this.sessionAtiva) {
+        const item = this.estoque.find(i => i.nome === 'Garrafa');
+        if (item) item.quantidade = 0;
+        console.log('[ESTOQUE] Item retirado, estoque atualizado:', this.estoque);
+      }
+
+    } catch (e) {
+      console.error('Erro ao processar mensagem MQTT', e, msg);
+    }
+  });
+}
+
 
   scrollLeft() {
     if (!this.cardsContainer) return;
