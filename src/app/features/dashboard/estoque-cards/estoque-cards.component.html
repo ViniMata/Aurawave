@@ -2,7 +2,7 @@
   <button class="arrow left" (click)="scrollLeft()">&#10094;</button>
 
   <div class="cards-container" #cardsContainer>
-    <div class="card" *ngFor="let item of estoque" (click)="selecionarItem(item.nome)">
+    <div class="card" *ngFor="let item of estoque$ | async" (click)="selecionarItem(item.nome)">
       <h3>{{ item.nome }}</h3>
       <p>{{ item.quantidade }} unidades</p>
     </div>

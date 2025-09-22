@@ -8,11 +8,11 @@
         <th>Produto</th>
         <th>Data do Evento</th>
         <th>Tipo do Evento</th>
-        <th>Sessões Ativas</th>
+        <th>Itens Retirados</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let log of logs$ | async" (click)="abrirItens(log, $event)">
+      <tr *ngFor="let log of logs$ | async">
         <td>{{ log.codigoItem }}</td>
         <td>{{ log.modelo || 'Padrão' }}</td>
         <td>{{ log.produto || '---' }}</td>
@@ -20,7 +20,7 @@
         <td>{{ log.tipoEvento || 'Acesso' }}</td>
         <td>
           <a href="#" (click)="abrirItens(log, $event)">
-            {{ log.itensRetirados?.length || 0 }} item(s)
+            {{ log.sessoes?.length || 0 }} item(s)
           </a>
         </td>
       </tr>
@@ -28,15 +28,32 @@
   </table>
 </div>
 
-<!-- Modal de Sessões -->
+<!-- Modal -->
 <div class="modal-backdrop" *ngIf="logSelecionado">
   <div class="modal">
-    <h4>Itens retirados na sessão {{ logSelecionado.codigoItem }} ({{ logSelecionado.usuario }})</h4>
-    <ul>
-      <li *ngFor="let item of logSelecionado.itensRetirados">
-        {{ item }}
-      </li>
-    </ul>
+    <h4>Detalhes da Sessão {{ logSelecionado.codigoItem }}</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>Nº</th>
+          <th>Colaborador</th>
+          <th>Almoxarifado</th>
+          <th>Laboratório</th>
+          <th>Início</th>
+          <th>Fim</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let sessao of logSelecionado.sessoes; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ sessao.colaborador }}</td>
+          <td>{{ sessao.almoxarifado }}</td>
+          <td>{{ sessao.laboratorio }}</td>
+          <td>{{ sessao.inicio | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ sessao.fim | date:'dd/MM/yyyy HH:mm' }}</td>
+        </tr>
+      </tbody>
+    </table>
     <button (click)="fecharModal()">Fechar</button>
   </div>
 </div>

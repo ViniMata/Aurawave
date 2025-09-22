@@ -1,6 +1,9 @@
-import { Component, ViewChild, ElementRef, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MqttService } from '../../services/mqtt.service';
+import { EstoqueService } from '../../services/estoque.service';
+import { LogsService } from '../../services/logs.service';
+import { Subject, takeUntil, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-estoque-cards',
@@ -9,62 +12,82 @@ import { MqttService } from '../../services/mqtt.service';
   templateUrl: './estoque-cards.component.html',
   styleUrls: ['./estoque-cards.component.scss']
 })
-export class EstoqueCardsComponent implements OnInit {
+export class EstoqueCardsComponent implements OnInit, OnDestroy {
   @ViewChild('cardsContainer') cardsContainer!: ElementRef<HTMLDivElement>;
   @Output() itemSelecionado = new EventEmitter<string>();
 
   sessionAtiva = false;
+  sessionStartTime: Date | null = null;
+  estoque$: Observable<{ nome: string; quantidade: number }[]>;
 
-  // estoque inicial
-  estoque = [
-    { nome: 'Garrafa', quantidade: 1 }
-  ];
+  private destroy$ = new Subject<void>();
 
-  constructor(private mqttService: MqttService) {}
+  constructor(
+    private mqttService: MqttService,
+    private estoqueService: EstoqueService,
+    private logsService: LogsService
+  ) {
+    this.estoque$ = this.estoqueService.estoque$;
+  }
 
   ngOnInit() {
-  this.mqttService.mensagemRecebida.subscribe((msg: any) => {
-    try {
-      console.log('[ESTOQUE] Mensagem recebida:', msg);
+    this.mqttService.mensagemRecebida
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(msg => this.processarMensagem(msg));
+  }
 
-      // Alterna sessão quando Pedro entra/sai
-      if (msg.eventType === 'access') {
-        this.sessionAtiva = !this.sessionAtiva;
-        console.log('[ESTOQUE] Sessão alterada. Ativa?', this.sessionAtiva);
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  processarMensagem(data: any) {
+    // ⚡ agora msg já é objeto JSON, sem data
+    if (!data || !data.eventType) return;
+
+    if (data.eventType === 'access') {
+      if (!this.sessionAtiva) {
+        this.sessionAtiva = true;
+        this.sessionStartTime = new Date();
+      } else {
+        this.sessionAtiva = false;
+        // Criar log ao finalizar sessão
+        const novoLog = {
+          codigoItem: 'I-' + Math.floor(Math.random() * 1000),
+          modelo: 'Modelo padrão',
+          produto: 'Garrafa',
+          dataEvento: new Date(),
+          tipoEvento: 'Saída',
+          sessoes: [
+            {
+              numero: 1,
+              colaborador: data.log?.name || 'Pedro',
+              almoxarifado: 'Padrão',
+              laboratorio: 'Padrão',
+              inicio: this.sessionStartTime,
+              fim: new Date()
+            }
+          ]
+        };
+        this.logsService.adicionarLog(novoLog);
       }
-
-      // Pedro pega a garrafa
-      if (msg.eventType === 'item' && this.sessionAtiva) {
-        const item = this.estoque.find(i => i.nome === 'Garrafa');
-        if (item) item.quantidade = 0;
-        console.log('[ESTOQUE] Item retirado, estoque atualizado:', this.estoque);
-      }
-
-    } catch (e) {
-      console.error('Erro ao processar mensagem MQTT', e, msg);
     }
-  });
-}
 
+    if (data.eventType === 'item' && this.sessionAtiva) {
+      this.estoqueService.atualizarItem('Garrafa', 0);
+    }
+  }
 
   scrollLeft() {
-    if (!this.cardsContainer) return;
-    const cardEl = this.cardsContainer.nativeElement.querySelector('.card') as HTMLElement;
+    const cardEl = this.cardsContainer?.nativeElement.querySelector('.card') as HTMLElement;
     if (!cardEl) return;
-    const cardWidth = cardEl.offsetWidth;
-    const gap = 16;
-    const cardsToScroll = 5;
-    this.cardsContainer.nativeElement.scrollBy({ left: -(cardWidth + gap) * cardsToScroll, behavior: 'smooth' });
+    this.cardsContainer.nativeElement.scrollBy({ left: -(cardEl.offsetWidth + 16) * 5, behavior: 'smooth' });
   }
 
   scrollRight() {
-    if (!this.cardsContainer) return;
-    const cardEl = this.cardsContainer.nativeElement.querySelector('.card') as HTMLElement;
+    const cardEl = this.cardsContainer?.nativeElement.querySelector('.card') as HTMLElement;
     if (!cardEl) return;
-    const cardWidth = cardEl.offsetWidth;
-    const gap = 16;
-    const cardsToScroll = 5;
-    this.cardsContainer.nativeElement.scrollBy({ left: (cardWidth + gap) * cardsToScroll, behavior: 'smooth' });
+    this.cardsContainer.nativeElement.scrollBy({ left: (cardEl.offsetWidth + 16) * 5, behavior: 'smooth' });
   }
 
   selecionarItem(nome: string) {
