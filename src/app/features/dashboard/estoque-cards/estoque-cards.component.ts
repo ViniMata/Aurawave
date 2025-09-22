@@ -16,10 +16,7 @@ export class EstoqueCardsComponent implements OnInit, OnDestroy {
   @ViewChild('cardsContainer') cardsContainer!: ElementRef<HTMLDivElement>;
   @Output() itemSelecionado = new EventEmitter<string>();
 
-  sessionAtiva = false;
-  sessionStartTime: Date | null = null;
   estoque$: Observable<{ nome: string; quantidade: number }[]>;
-
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -41,39 +38,14 @@ export class EstoqueCardsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  processarMensagem(data: any) {
-    // ⚡ agora msg já é objeto JSON, sem data
+  private processarMensagem(data: any) {
     if (!data || !data.eventType) return;
 
-    if (data.eventType === 'access') {
-      if (!this.sessionAtiva) {
-        this.sessionAtiva = true;
-        this.sessionStartTime = new Date();
-      } else {
-        this.sessionAtiva = false;
-        // Criar log ao finalizar sessão
-        const novoLog = {
-          codigoItem: 'I-' + Math.floor(Math.random() * 1000),
-          modelo: 'Modelo padrão',
-          produto: 'Garrafa',
-          dataEvento: new Date(),
-          tipoEvento: 'Saída',
-          sessoes: [
-            {
-              numero: 1,
-              colaborador: data.log?.name || 'Pedro',
-              almoxarifado: 'Padrão',
-              laboratorio: 'Padrão',
-              inicio: this.sessionStartTime,
-              fim: new Date()
-            }
-          ]
-        };
-        this.logsService.adicionarLog(novoLog);
-      }
-    }
+    // Envia o evento para o LogsService
+    this.logsService.processEvent(data);
 
-    if (data.eventType === 'item' && this.sessionAtiva) {
+    // Atualiza estoque se houver qualquer sessão ativa
+    if (data.eventType === 'item' && Object.keys(this.logsService.activeSessions).length > 0) {
       this.estoqueService.atualizarItem('Garrafa', 0);
     }
   }

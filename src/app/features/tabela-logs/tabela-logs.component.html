@@ -16,7 +16,7 @@
         <td>{{ log.codigoItem }}</td>
         <td>{{ log.modelo || 'Padrão' }}</td>
         <td>{{ log.produto || '---' }}</td>
-        <td>{{ log.dataEvento | date:'dd/MM/yyyy HH:mm' }}</td>
+        <td>{{ log.dataEvento | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         <td>{{ log.tipoEvento || 'Acesso' }}</td>
         <td>
           <a href="#" (click)="abrirItens(log, $event)">
@@ -49,8 +49,8 @@
           <td>{{ sessao.colaborador }}</td>
           <td>{{ sessao.almoxarifado }}</td>
           <td>{{ sessao.laboratorio }}</td>
-          <td>{{ sessao.inicio | date:'dd/MM/yyyy HH:mm' }}</td>
-          <td>{{ sessao.fim | date:'dd/MM/yyyy HH:mm' }}</td>
+          <td>{{ sessao.inicio | date:'dd/MM/yyyy HH:mm:ss' }}</td>
+          <td>{{ sessao.fim | date:'dd/MM/yyyy HH:mm:ss' }}</td>
         </tr>
       </tbody>
     </table>
