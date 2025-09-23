@@ -1,9 +1,8 @@
-import { Component, ViewChild, ElementRef, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef, EventEmitter, Output, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MqttService } from '../../services/mqtt.service';
 import { EstoqueService } from '../../services/estoque.service';
 import { LogsService } from '../../services/logs.service';
-import { Subject, takeUntil, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-estoque-cards',
@@ -19,34 +18,75 @@ export class EstoqueCardsComponent implements OnInit, OnDestroy {
   estoque$: Observable<{ nome: string; quantidade: number }[]>;
   private destroy$ = new Subject<void>();
 
+  private sessionAtiva = false;
+  private sessionStartTime: Date | null = null;
+
   constructor(
-    private mqttService: MqttService,
     private estoqueService: EstoqueService,
     private logsService: LogsService
   ) {
     this.estoque$ = this.estoqueService.estoque$;
   }
 
-  ngOnInit() {
-    this.mqttService.mensagemRecebida
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(msg => this.processarMensagem(msg));
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-  private processarMensagem(data: any) {
-    if (!data || !data.eventType) return;
+  // Captura as teclas
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.key === 'p') {
+      this.iniciarSessao();
+    } else if (event.key === 'o') {
+      this.retirarItem();
+    } else if (event.key === 'i') {
+      this.finalizarSessao();
+    }
+  }
 
-    // Envia o evento para o LogsService
-    this.logsService.processEvent(data);
+  private iniciarSessao() {
+    if (!this.sessionAtiva) {
+      this.sessionAtiva = true;
+      this.sessionStartTime = new Date();
+      console.log('[Sessão] Iniciada por Pedro em', this.sessionStartTime);
+    }
+  }
 
-    // Atualiza estoque se houver qualquer sessão ativa
-    if (data.eventType === 'item' && Object.keys(this.logsService.activeSessions).length > 0) {
+  private retirarItem() {
+    if (this.sessionAtiva) {
       this.estoqueService.atualizarItem('Garrafa', 0);
+      console.log('[Estoque] Pedro retirou uma garrafa');
+    }
+  }
+
+  private finalizarSessao() {
+    if (this.sessionAtiva && this.sessionStartTime) {
+      this.sessionAtiva = false;
+
+      const novoLog = {
+        codigoItem: 'I-' + Math.floor(Math.random() * 10000),
+        modelo: 'Modelo padrão',
+        produto: 'Garrafa',
+        dataEvento: new Date(),
+        tipoEvento: 'Saída',
+        sessoes: [
+          {
+            numero: 1,
+            colaborador: 'Pedro',
+            almoxarifado: 'Padrão',
+            laboratorio: 'Padrão',
+            inicio: this.sessionStartTime,
+            fim: new Date(),
+            itens: ['Garrafa']
+          }
+        ]
+      };
+
+      this.logsService.adicionarLog(novoLog);
+      console.log('[Sessão] Finalizada e log criado:', novoLog);
     }
   }
 
