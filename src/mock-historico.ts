@@ -2,7 +2,7 @@ export const graficoMockCompleto = [
   { nome: 'Garrafa', historico: [
       { data: '2025-09-21', quantidade: 0 },
       { data: '2025-09-22', quantidade: 0 },
-      { data: '2025-09-23', quantidade: 0 }
+      { data: '2025-09-23', quantidade: 1 }
   ]},
   { nome: 'Seringas', historico: [
       { data: '2025-09-08', quantidade: 2 },
