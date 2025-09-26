@@ -1,16 +1,25 @@
-# EstoqueDashboard
+# 🏥 Aurawave - Dashboard de Gestão Inteligente de Estoque
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.3.
+Dashboard moderno e responsivo para monitoramento de estoque em almoxarifados do setor de saúde, utilizando tecnologia RFID e IA generativa.
 
-## Development server
+## ✨ Características
 
-To start a local development server, run:
+### 🎨 Design Moderno e Profissional
+- **Interface SaaS**: Design clean e moderno inspirado em produtos SaaS
+- **Paleta de cores personalizada**: Azul principal (#015efe), tons de cinza e preto
+- **Tipografia moderna**: Fonte Inter para melhor legibilidade
+- **Animações suaves**: Transições e efeitos hover elegantes
 
-```bash
-ng serve
-```
+### 📱 Totalmente Responsivo
+- **Mobile-first**: Adaptado para dispositivos móveis
+- **Breakpoints inteligentes**: Layout que se adapta a diferentes tamanhos de tela
+- **Navegação touch-friendly**: Otimizado para interações touch
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+### 🧠 Recursos Inteligentes
+- **IA Generativa**: Insights automáticos sobre padrões de consumo
+- **Previsões de recarga**: Algoritmos preditivos para gestão proativa
+- **Análise em tempo real**: Monitoramento contínuo via RFID
+- **Alertas inteligentes**: Notificações baseadas em critérios personalizáveis
 
 ## Code scaffolding
 

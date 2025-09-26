@@ -1,16 +1,133 @@
-<div class="dashboard-container">
-
-  <!-- Conteúdo principal -->
-  <div class="main-content">
-      
+<div class="dashboard-content">
     <!-- Cards de estoque -->
     <app-estoque-cards (itemSelecionado)="toggleGrafico($event)"></app-estoque-cards>
 
-    <!-- Parte inferior: gráfico + previsão -->
-    <div class="bottom-section">
-      <app-grafico-historico [filtroInsumo]="insumoFiltrado"></app-grafico-historico>
-      <app-previsao-recarga class="half"></app-previsao-recarga>
+    <!-- Layout principal: gráfico + sidebar direita -->
+    <div class="main-dashboard-layout">
+      <!-- Área do gráfico principal -->
+      <div class="chart-area">
+        <app-grafico-historico [filtroInsumo]="insumoFiltrado"></app-grafico-historico>
+        
+        <!-- Estatísticas embaixo do gráfico -->
+        <div class="statistics-section">
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Movimentações Hoje</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M7 17L17 7" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M17 17V7H7" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="stat-value success">+84</div>
+              <div class="stat-description">↑ 12% vs ontem</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Alertas Ativos</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M10.29 3.86L1.82 18A2 2 0 0 0 3.64 21h16.72a2 2 0 0 0 1.82-3L13.71 3.86a2 2 0 0 0-3.42 0z" stroke="#f59e0b" stroke-width="2"/>
+                  <path d="M12 9v4" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 17h.01" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="stat-value warning">7</div>
+              <div class="stat-description">3 críticos, 4 médios</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Tempo Resposta RFID</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="#6366f1" stroke-width="2"/>
+                  <path d="M12 6v6l4 2" stroke="#6366f1" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div class="stat-value">0.3s</div>
+              <div class="stat-description">Média últimas 24h</div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-header">
+                <span class="stat-title">Taxa Precisão</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 12l2 2 4-4" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+                </svg>
+              </div>
+              <div class="stat-value success">99.7%</div>
+              <div class="stat-description">↑ 0.2% vs semana passada</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Sidebar direita -->
+      <div class="right-sidebar">
+        <!-- Previsão de recarga -->
+        <div class="ai-section">
+          <app-previsao-recarga></app-previsao-recarga>
+        </div>
+        
+        <!-- Insights de IA -->
+        <div class="ai-insights-section">
+          <h3 class="section-title">Insights de IA</h3>
+          <div class="insights-card">
+            <div class="insight-header">
+              <div class="insight-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="insight-badge">IA Recomenda</span>
+            </div>
+            
+            <div class="insight-content">
+              <h4 class="insight-title">Reabastecer Equipamentos Médicos</h4>
+              <p class="insight-description">
+                Com base no padrão de consumo, recomendamos reabastecer os equipamentos médicos nos próximos 3 dias para evitar ruptura de estoque.
+              </p>
+              <div class="insight-metrics">
+                <div class="metric">
+                  <span class="metric-label">Confiança</span>
+                  <div class="confidence-bar">
+                    <div class="confidence-fill" style="width: 89%"></div>
+                  </div>
+                  <span class="metric-value">89%</span>
+                </div>
+                <div class="metric">
+                  <span class="metric-label">Impacto</span>
+                  <span class="metric-value high">Alto</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="insights-card">
+            <div class="insight-header">
+              <div class="insight-icon success">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <span class="insight-badge success">Otimização</span>
+            </div>
+            
+            <div class="insight-content">
+              <h4 class="insight-title">Eficiência de Layout</h4>
+              <p class="insight-description">
+                O layout atual do almoxarifado está 94.5% otimizado. Sugerimos reorganizar o setor C3 para melhorar o fluxo.
+              </p>
+              <div class="insight-metrics">
+                <div class="metric">
+                  <span class="metric-label">Economia</span>
+                  <span class="metric-value">12min/dia</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-  </div>
 </div>

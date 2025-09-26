@@ -20,6 +20,9 @@ export class EstoqueCardsComponent implements OnInit, OnDestroy {
 
   private sessionAtiva = false;
   private sessionStartTime: Date | null = null;
+  
+  selectedItem: string = '';
+  scrollPosition: number = 0;
 
   constructor(
     private estoqueService: EstoqueService,
@@ -103,7 +106,29 @@ export class EstoqueCardsComponent implements OnInit, OnDestroy {
   }
 
   selecionarItem(nome: string) {
+    this.selectedItem = nome;
     this.itemSelecionado.emit(nome);
     console.log(nome);
+  }
+
+  trackByItem(index: number, item: { nome: string; quantidade: number }): string {
+    return item.nome;
+  }
+
+  getStatusClass(quantidade: number): string {
+    if (quantidade <= 50) return 'critical';
+    if (quantidade <= 150) return 'low';
+    return 'normal';
+  }
+
+  getStatusText(quantidade: number): string {
+    if (quantidade <= 50) return 'Crítico';
+    if (quantidade <= 150) return 'Baixo';
+    return 'Normal';
+  }
+
+  getProgressWidth(quantidade: number): number {
+    const max = 500; // Assumindo 500 como quantidade máxima
+    return Math.min((quantidade / max) * 100, 100);
   }
 }

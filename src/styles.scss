@@ -1,1 +1,53 @@
-/* You can add global styles to this file, and also import other style files */
+/* Global Styles - Aurawave Dashboard */
+
+:root {
+  --primary-blue: #015efe;
+  --primary-black: #050505;
+  --light-gray: #d5dcd9;
+  --white: #ffffff;
+  --gradient: linear-gradient(135deg, #015efe 0%, #0146cc 100%);
+  --shadow-light: 0 4px 20px rgba(1, 94, 254, 0.1);
+  --shadow-medium: 0 8px 30px rgba(1, 94, 254, 0.15);
+  --shadow-dark: 0 12px 40px rgba(0, 0, 0, 0.1);
+  --border-radius: 16px;
+  --border-radius-small: 8px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  color: var(--primary-black);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary-blue);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0146cc;
+}
