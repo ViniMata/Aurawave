@@ -1,0 +1,28 @@
+<div class="app-layout" [class.sidebar-open]="isOpen" [class.sidebar-collapsed]="isCollapsed">
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isCollapsed]="isCollapsed"
+    [class.sidebar-open]="isOpen">
+  </app-sidebar>
+
+  <!-- Área principal (Header + Content) -->
+  <div class="main-area">
+    <!-- Header -->
+    <app-header 
+      (toggleSidebar)="onToggleSidebar()" 
+      (toggleCollapse)="onToggleCollapse()">
+    </app-header>
+
+    <!-- Conteúdo principal -->
+    <main class="main-content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Overlay para mobile -->
+  <div 
+    class="sidebar-overlay" 
+    [class.active]="isOpen"
+    (click)="closeSidebar()">
+  </div>
+</div>
