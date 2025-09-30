@@ -1,4 +1,4 @@
-# 🏥 Aurawave - Dashboard de Gestão Inteligente de Estoque
+# 🏥 Aurawave - Dashboard de Gestão Inteligente de Estoques
 
 Dashboard moderno e responsivo para monitoramento de estoque em almoxarifados do setor de saúde, utilizando tecnologia RFID e IA generativa.
 
